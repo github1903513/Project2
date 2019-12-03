@@ -1,0 +1,59 @@
+Spotify
+
+1903513@laurea.fi
+spotify62302143
+
+a9d8a3b51ec9450c97c94bcc4f628f00
+
+Client ID a9d8a3b51ec9450c97c94bcc4f628f00
+Client Secret b1689968a4f94380a34fcf9b4cbfe830 
+
+https://api.spotify.com/v1/artists/{a9d8a3b51ec9450c97c94bcc4f628f00}
+
+https://api.spotify.com/v1/artists/37i9dQZF1DXcBWIGoYBM5M
+
+37i9dQZF1DXcBWIGoYBM5M
+
+https://leoyeh.me/2017/10/21/%E8%A7%A3%E6%B1%BA%E5%95%8F%E9%A1%8C-Spotify-Web-API-1/
+https://cloud.tencent.com/developer/ask/196001
+
+https://segmentfault.com/a/1190000018026841(一篇文章玩转世界最强音乐Spotify API操作)
+
+https://codeday.me/bug/20190706/1394818.html(将localhost设置为Spotify redirect_uri)
+https://codeday.me/process/20180729/192691.html (Token – 流程图)
+https://codeday.me/bug/20190730/1578716.html
+http://www.uwenku.com/question/p-zpymxeqo-bgr.html(在Spotify API中搜索曲目Javascript +添加到服务器)
+https://developer.spotify.com/console/get-search-item/?q=tania%20bowra&type=artist&market=&limit=&offset= (spotify网站具体URL例子)
+https://xbuba.com/questions/51200445 (使用客户端凭据流刷新spotify令牌)
+https://www.jianshu.com/p/54496a47fd0d(https://www.jianshu.com/p/54496a47fd0d)
+https://developer.spotify.com/documentation/general/guides/authorization-guide/#client-credentials-flow(spotify Client Credentials Flow)
+
+How can I get an access token Spotify API?
+
+2步：获得访问令牌
+
+curl H "Authorization: Basic YOUR_CLIENT_CREDENTIALS" -d grant_type=client_credentials https://accounts.spotify.com/api/token 
+YOUR_CLIENT_CREDENTIALS是你的ClientId:ClientSecret，你可以使用这个函数来得到它：
+
+btoa('YOUR_CLIENT_ID:YOUR_CLIENT_SECRET') 
+做Ajax请求实际上是一个有点棘手和Spotify居然要你做它的服务器端，我建议你参考此链接：
+
+Access-Control-Allow-Origin denied spotify api
+https://developer.spotify.com/documentation/general/guides/authorization-guide/#client-credentials-flow
+
+
+对于您的号码2， “如果我有来自艺术家的2到4首歌曲=使用他的TOP10和所有专辑创建播放列表，这些歌曲来自” ，你必须做很多API调用，但这很容易做到：
+
+获得艺术家ID后（您将通过此终结点找到它“ GET https://api.spotify.com/v1/search?q={artist_name}&type=artist ”）
+
+您可以使用端点“ GET https://api.spotify.com/v1/artists/{id}/top-tracks ”来询问前十首曲目
+
+现在你有了自己的曲目对象，你可以获得他们的专辑ID，并使用这个端点获取专辑的曲目“ GET https://api.spotify.com/v1/albums/{id}/tracks ”
+
+我希望它能帮到你！
+
+
+是的,它可以通过libspotify获得.有一个SPArtistBrowse类,包含很多元数据,包括相关的艺术家.看看
+CocoaLibSpotify附带一个文档包,您可以在其中找到有关包含内容的更多详细信息：https://github.com/spotify/cocoalibspotify.
+
+请注意,加载整个SPArtistBrowse对象目前速度非常慢.我假设它与libspotify有关,它将所有内容加载到一个块和主线程(？)上.据我所知,Spotify可能会在即将推出的libspotify版本中对此进行补救.

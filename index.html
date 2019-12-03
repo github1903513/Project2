@@ -1,0 +1,195 @@
+<HTML>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="animate.css">
+</head>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous">
+</script>
+
+<script>
+var jsonObj;
+var artistJsonobj;
+var artisJsonoinfo;
+var api_key="addf50db8f802b0cad21bfda6ac73de9";
+var artist;
+
+(function ($) {
+           $.extend({
+IsartistSearchTextId: function ($textId) {
+                    var $obj = $("#" + $textId); //存储当前文本框对象
+                    var valStr = $obj.val(); //或者文本框的值
+                    var result = $.IsartistSearchTextVal(valStr);
+                    if (!result) { //判断返回值 是否为正确
+                        $obj.focus(); //获得光标
+                    }
+                    return result;
+                },
+ })(jQuery);
+});
+
+
+function loadTopartist()
+{
+var url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&limit=10&api_key="+api_key+"&format=json";
+//url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&limit=10&api_key=addf50db8f802b0cad21bfda6ac73de9&format=json";
+
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+      //console.log(artistJsonobj);
+      // Receive the response as JSON and parse it into a JS variable
+      artistJsonobj =JSON.parse(xmlhttp.responseText);
+        //artistJsonobj = JSON.stringify(xmlhttp.responseText);
+        //artisJsonobjList = JSON.parse(artistJsonobj);
+        //document.getElementById('weatherdata').innerHTML=artisJsonobjList;
+var obj=document.getElementById("artist");
+  for (var i=0; i < artistJsonobj.artists.artist.length; i++){
+    obj.options.add(new Option(artistJsonobj.artists.artist[i].name,artistJsonobj.artists.artist[i].name));
+  }
+
+}
+}
+}
+
+function loadartistDetail() {
+
+    if(document.getElementById("artist").value!= "null")
+    {
+      artist=document.getElementById("artist").value;
+    }
+    else {
+      document.getElementById("info").innerHTML = "Artist's info goes here......";
+      document.getElementById("topAblums").innerHTML = "Artist's top 6 ablums goes here......";
+      document.getElementById("infoAblums").innerHTML = "";
+      alert("Please select a artist!");
+      return false;
+    }
+
+    //http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=Billie%20Eilish&api_key=addf50db8f802b0cad21bfda6ac73de9&format=json
+    var urlInfo = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="+artist+"&api_key="+api_key+"&format=json";
+    var urlalbums = "http://ws.audioscrobbler.com//2.0/?method=artist.gettopalbums&artist="+artist+"&limit=6&api_key="+api_key+"&format=json";
+    //var url = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist="+artist+"&api_key="+api_key+"&format=json";
+
+   //get artist information
+   var xmlhttp1 = new XMLHttpRequest();
+   xmlhttp1.open("GET", urlInfo, true);
+   xmlhttp1.send();
+   xmlhttp1.onreadystatechange = function()
+   {
+     if (xmlhttp1.readyState == 4 && xmlhttp1.status == 200) {
+      // document.getElementById("info").innerHTML = xmlhttp1.responseText;;
+      artisJsonoinfo = JSON.parse(xmlhttp1.responseText);
+      document.getElementById("info").innerHTML = "<h2>"+artist+"</h2>"+artisJsonoinfo.artist.bio.summary;
+     }
+   }
+
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", urlalbums, true);
+	  xmlhttp.send();
+
+	  xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	        // Receive the response as JSON and parse it into a JS variable
+            jsonObj = JSON.parse(xmlhttp.responseText);
+            document.getElementById("topAblums").innerHTML = xmlhttp.responseText;
+            var detail =jsonObj.topalbums.album;
+            //jsonObj.topalbums.album[0].image[2]
+
+            var out = "<h2>Albums</h2>";
+            out+="<table>";
+            for (var i=0; i<detail.length; i=i+3)
+            {
+              out += '<tr>';
+
+              out += '<td><div class="col-md-4 text-center animate-box"><a class="work" href="#" onclick="showAlbums()" id='+JSON.stringify(detail[i].name)+'><div class="work-grid" style="background-image:url('+detail[i].image[3]['#text']+');"><div class="inner"><div class="desc"><h3>'+detail[i].name+'</h3><span class="cat">playcount:'+detail[i].playcount+'</span></div></div></div></a></div></td>';
+              out += '<td><div class="col-md-4 text-center animate-box"><a class="work" href="#" onclick="showAlbums()" id='+JSON.stringify(detail[i+1].name)+'><div class="work-grid" style="background-image:url('+detail[i+1].image[3]['#text']+');"><div class="inner"><div class="desc"><h3>'+detail[i+1].name+'</h3><span class="cat">playcount:'+detail[i+1].playcount+'</span></div></div></div></a></div></td>';
+              out += '<td><div class="col-md-4 text-center animate-box"><a class="work" href="#" onclick="showAlbums()" id='+JSON.stringify(detail[i+2].name)+'><div class="work-grid" style="background-image:url('+detail[i+2].image[3]['#text']+');"><div class="inner"><div class="desc"><h3>'+detail[i+2].name+'</h3><span class="cat">playcount:'+detail[i+2].playcount+'</span></div></div></div></a></div></td>';
+
+              out += '</tr>';
+
+            }
+            out += "</table>";
+            document.getElementById("topAblums").innerHTML = out;
+		}
+	}
+  return true;
+}
+
+function showAlbums() {
+  //alert(event.currentTarget.id);
+  var albumsName = event.currentTarget.id;
+  var urlalbumsinfo ="http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key="+api_key+"&artist="+artist+"&album="+albumsName+"&format=json";
+  var xmlhttp2 = new XMLHttpRequest();
+  xmlhttp2.open("GET", urlalbumsinfo, true);
+  xmlhttp2.send();
+  xmlhttp2.onreadystatechange = function()
+  {
+    if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+     // document.getElementById("info").innerHTML = xmlhttp1.responseText;;
+     artisJsonoinfo = JSON.parse(xmlhttp2.responseText);
+     if (artisJsonoinfo.album.wiki === undefined) {
+        document.getElementById("infoAblums").innerHTML = "<h2>"+albumsName+"</h2> no album info<br/>";
+      }
+      else {
+        document.getElementById("infoAblums").innerHTML = "<h2>"+albumsName+"</h2>"+artisJsonoinfo.album.wiki.summary+"<br/>";
+      }
+
+
+     var tracklist="";
+     for (var i=0; i<artisJsonoinfo.album.tracks.track.length; i++)
+     {
+       tracklist += artisJsonoinfo.album.tracks.track[i].name+"<br/>";
+     }
+     document.getElementById("infoAblums").innerHTML += "<h2>Albums tracks list:</h2>"+tracklist;
+    }
+  }
+//jQuery  effects
+  $(document).ready(function(){
+    $(".topAblums").click(function(){
+    $(".infoAblums").slideToggle("slow");
+  });
+});
+
+}
+
+</script>
+
+
+
+<body onload="loadTopartist()">
+
+  <div class="container">
+
+  <h2>Artists and Albums</h2>
+
+  <p>Select a artist(Top 10 artists in the LastFM):
+  <select name="myArtist" id="artist" onchange="">
+    <option value="null">select a artist</option>
+  </select>
+<br/>
+<br/>
+Type in a search query: <input type="text" id="artistSearch"></input>
+<br/>
+
+<span onclick="return loadartistDetail()" class="addBtn" id="addBtn">Search</span>
+</div>
+
+<div id="info" class="artistinfo">Artist's info goes here......</div>
+<br/>
+<br/>
+<div id="topAblums" class="topAblums" >Artist's top 6 ablums goes here......</div>
+<br/>
+<br/>
+<div id="infoAblums" class="infoAblums" ></div>
+
+</body>
+</html>
