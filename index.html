@@ -18,7 +18,7 @@ var artisJsonoinfo;
 var api_key="addf50db8f802b0cad21bfda6ac73de9";
 var artist;
 
-(function ($) {
+/*(function ($) {
            $.extend({
 IsartistSearchTextId: function ($textId) {
                     var $obj = $("#" + $textId); //存储当前文本框对象
@@ -30,7 +30,7 @@ IsartistSearchTextId: function ($textId) {
                     return result;
                 },
  })(jQuery);
-});
+});*/
 
 
 function loadTopartist()
@@ -88,6 +88,14 @@ function loadartistDetail() {
       // document.getElementById("info").innerHTML = xmlhttp1.responseText;;
       artisJsonoinfo = JSON.parse(xmlhttp1.responseText);
       document.getElementById("info").innerHTML = "<h2>"+artist+"</h2>"+artisJsonoinfo.artist.bio.summary;
+
+      //jQuery  effects
+        $(document).ready(function(){
+          $("#addBtn").click(function(){
+          $(".artistinfo").fadeIn(8000);
+        });
+      });
+
      }
    }
 
@@ -119,6 +127,8 @@ function loadartistDetail() {
             }
             out += "</table>";
             document.getElementById("topAblums").innerHTML = out;
+
+
 		}
 	}
   return true;
@@ -141,6 +151,7 @@ function showAlbums() {
       }
       else {
         document.getElementById("infoAblums").innerHTML = "<h2>"+albumsName+"</h2>"+artisJsonoinfo.album.wiki.summary+"<br/>";
+
       }
 
 
@@ -176,9 +187,9 @@ function showAlbums() {
     <option value="null">select a artist</option>
   </select>
 <br/>
-<br/>
+<!--<br/>
 Type in a search query: <input type="text" id="artistSearch"></input>
-<br/>
+<br/>-->
 
 <span onclick="return loadartistDetail()" class="addBtn" id="addBtn">Search</span>
 </div>
