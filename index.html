@@ -35,7 +35,7 @@ IsartistSearchTextId: function ($textId) {
 
 function loadTopartist()
 {
-var url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&limit=10&api_key="+api_key+"&format=json";
+var url = "https://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&limit=10&api_key="+api_key+"&format=json";
 //url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&limit=10&api_key=addf50db8f802b0cad21bfda6ac73de9&format=json";
 
 var xmlhttp = new XMLHttpRequest();
@@ -74,8 +74,8 @@ function loadartistDetail() {
     }
 
     //http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=Billie%20Eilish&api_key=addf50db8f802b0cad21bfda6ac73de9&format=json
-    var urlInfo = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="+artist+"&api_key="+api_key+"&format=json";
-    var urlalbums = "http://ws.audioscrobbler.com//2.0/?method=artist.gettopalbums&artist="+artist+"&limit=6&api_key="+api_key+"&format=json";
+    var urlInfo = "https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="+artist+"&api_key="+api_key+"&format=json";
+    var urlalbums = "https://ws.audioscrobbler.com//2.0/?method=artist.gettopalbums&artist="+artist+"&limit=6&api_key="+api_key+"&format=json";
     //var url = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist="+artist+"&api_key="+api_key+"&format=json";
 
    //get artist information
@@ -127,7 +127,7 @@ function loadartistDetail() {
 function showAlbums() {
   //alert(event.currentTarget.id);
   var albumsName = event.currentTarget.id;
-  var urlalbumsinfo ="http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key="+api_key+"&artist="+artist+"&album="+albumsName+"&format=json";
+  var urlalbumsinfo ="https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key="+api_key+"&artist="+artist+"&album="+albumsName+"&format=json";
   var xmlhttp2 = new XMLHttpRequest();
   xmlhttp2.open("GET", urlalbumsinfo, true);
   xmlhttp2.send();
